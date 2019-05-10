@@ -33,7 +33,8 @@ install:
 build: false
 
 test_script:
-  - copy config %USERPROFILE%\.cargo
+  - copy config %USERPROFILE%\.cargo\config
+  - type %USERPROFILE%\.cargo\config
   - cargo build -vv
   - del %USERPROFILE%\.cargo\config
   - cargo clean
