@@ -10,6 +10,9 @@ if ($env:ARCH -eq 'i686') {
   throw "Unexpected ARCH: $env:ARCH"
 }
 
+# Write the appropriate mingw directory for the .cargo/config file.
+C:\msys64\usr\bin\sed -i '' -e "s/BITS/$bits/" config
+
 # Add the MinGW tools (e.g. GCC) to PATH for use by CMake.
 $env:PATH = 'C:\msys64\mingw' + $bits + '\bin;' + $env:PATH
 
