@@ -1,0 +1,10 @@
+[package]
+name = "rust-gnu-linker-test"
+version = "0.1.0"
+authors = ["Unknown"]
+edition = "2018"
+
+[dependencies]
+
+[build-dependencies]
+pkg-config = "0.3"
