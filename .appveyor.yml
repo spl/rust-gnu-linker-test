@@ -1,0 +1,28 @@
+# Use a simple incremented version number.
+version: '{build}'
+
+# Download the repository as a zip archive.
+# https://www.appveyor.com/docs/how-to/repository-shallow-clone/
+shallow_clone: true
+
+environment:
+  matrix:
+
+    - CHANNEL: stable
+      ARCH: i686
+      TOOLCHAIN: gnu
+
+    - CHANNEL: stable
+      ARCH: x86_64
+      TOOLCHAIN: gnu
+
+install:
+  - ps: .appveyor\install-rust.ps1
+  - ps: .appveyor\setup-gnu.ps1
+
+# We do everything in the test_script phase, so we disable the build phase to
+# avoid AppVeyor trying to build something and failing.
+build: false
+
+test_script:
+  - cargo build -vv
