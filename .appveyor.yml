@@ -10,21 +10,25 @@ environment:
 
     - CHANNEL: stable
       ARCH: i686
-      BITS: 32
-      WITH_CONFIG: 1
 
     - CHANNEL: stable
       ARCH: x86_64
-      BITS: 64
+      CONFIG_TOOLCHAIN: 1
 
-    - CHANNEL: nightly
+    - CHANNEL: stable
       ARCH: i686
-      BITS: 32
+      CONFIG_MINGW: 1
 
     - CHANNEL: nightly
       ARCH: x86_64
-      BITS: 64
-      WITH_CONFIG: 1
+
+    - CHANNEL: nightly
+      ARCH: i686
+      CONFIG_TOOLCHAIN: 1
+
+    - CHANNEL: nightly
+      ARCH: x86_64
+      CONFIG_MINGW: 1
 
 install:
   # Install Rust
@@ -35,12 +39,9 @@ install:
   - rustc --version
   - cargo --version
 
-  # Set up config file
-  - C:\msys64\usr\bin\sed -i "s/BITS/%BITS%/" config
-  - type config
-
   # Set path for toolchain
-  - set PATH=C:\msys64\mingw%BITS%\bin;%PATH%
+  - if %ARCH%==i686   set PATH=C:\msys64\mingw32\bin;%PATH%
+  - if %ARCH%==x86_64 set PATH=C:\msys64\mingw64\bin;%PATH%
   - where gcc
   - where pkg-config
 
@@ -61,5 +62,6 @@ install:
 build: false
 
 test_script:
-  - if defined WITH_CONFIG copy config %USERPROFILE%\.cargo\config
+  - if defined CONFIG_TOOLCHAIN copy config-toolchain %USERPROFILE%\.cargo\config
+  - if defined CONFIG_MINGW     copy config-mingw     %USERPROFILE%\.cargo\config
   - cargo build -vv
