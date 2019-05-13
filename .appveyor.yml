@@ -10,22 +10,25 @@ environment:
 
     - CHANNEL: stable
       ARCH: i686
-      TOOLCHAIN: gnu
 
     - CHANNEL: stable
       ARCH: x86_64
-      TOOLCHAIN: gnu
 
     - CHANNEL: nightly
       ARCH: i686
-      TOOLCHAIN: gnu
 
     - CHANNEL: nightly
       ARCH: x86_64
-      TOOLCHAIN: gnu
 
 install:
-  - ps: .appveyor\install-rust.ps1
+  # Install Rust
+  - appveyor-retry appveyor downloadfile https://win.rustup.rs/ -filename rustup-init.exe -timeout 60000
+  - rustup-init --version
+  - rustup-init -y --default-toolchain %CHANNEL%-%ARCH%-pc-windows-gnu
+  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+  - rustc --version
+  - cargo --version
+
   - ps: .appveyor\setup-gnu.ps1
 
 # We do everything in the test_script phase, so we disable the build phase to
