@@ -8,6 +8,8 @@ shallow_clone: true
 environment:
   matrix:
 
+    # This is not an exhaustive list, just a representative sample.
+
     - CHANNEL: stable
       ARCH: i686
 

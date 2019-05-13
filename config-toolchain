@@ -1,4 +1,5 @@
-[target.i686-pc-windows-gnu]
-linker = "C:/Users/appveyor/.rustup/toolchains/stable-i686-pc-windows-gnu/lib/rustlib/i686-pc-windows-gnu/bin/gcc"
+# Note that we test stable-x86_64 and nightly-i686.
 [target.x86_64-pc-windows-gnu]
 linker = "C:/Users/appveyor/.rustup/toolchains/stable-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/bin/gcc"
+[target.i686-pc-windows-gnu]
+linker = "C:/Users/appveyor/.rustup/toolchains/nightly-i686-pc-windows-gnu/lib/rustlib/i686-pc-windows-gnu/bin/gcc"
