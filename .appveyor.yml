@@ -37,7 +37,7 @@ install:
 
   # Set up config file
   - C:\msys64\usr\bin\sed -i "s/BITS/%BITS%/" config
-  - type %USERPROFILE%\.cargo\config
+  - type config
 
   # Set path for toolchain
   - set PATH=C:\msys64\mingw%BITS%\bin;%PATH%
