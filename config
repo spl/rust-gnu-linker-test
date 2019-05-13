@@ -1,3 +1,2 @@
 [target.i686-pc-windows-gnu]
 linker = "C:/msys64/mingwBITS/bin/gcc"
-ar = "C:/msys64/mingwBITS/bin/ar"
