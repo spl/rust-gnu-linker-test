@@ -10,26 +10,46 @@ environment:
 
     - CHANNEL: stable
       ARCH: i686
+      BITS: 32
 
     - CHANNEL: stable
       ARCH: x86_64
+      BITS: 64
 
     - CHANNEL: nightly
       ARCH: i686
+      BITS: 32
 
     - CHANNEL: nightly
       ARCH: x86_64
+      BITS: 64
 
 install:
   # Install Rust
   - appveyor-retry appveyor downloadfile https://win.rustup.rs/ -filename rustup-init.exe -timeout 60000
   - rustup-init --version
   - rustup-init -y --default-toolchain %CHANNEL%-%ARCH%-pc-windows-gnu
-  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+  - set PATH=%USERPROFILE%\.cargo\bin;%PATH%
   - rustc --version
   - cargo --version
 
-  - ps: .appveyor\setup-gnu.ps1
+  # Use BITS where needed
+  - C:\msys64\usr\bin\sed -i "" -e "s/BITS/%BITS%/" config
+  - set PATH=C:\msys64\mingw%BITS%\bin;%PATH%
+
+  # Create the `pacman` package cache directory to avoid a warning.
+  #
+  # Sources:
+  # - https://bbs.archlinux.org/viewtopic.php?id=9
+  # - https://github.com/open62541/open62541/issues/2068
+  - C:\msys64\usr\bin\mkdir -p /var/cache/pacman/pkg
+
+  # Install `graphite2`
+  - appveyor-retry C:\msys64\usr\bin\pacman --sync --sysupgrade --needed --noconfirm "mingw-w64-%ARCH%-graphite2"
+  - C:\msys64\usr\bin\pacman --query --info "mingw-w64-%ARCH%-graphite2"
+
+  - where pkg-config
+  - pkg-config --libs --cflags graphite2
 
 # We do everything in the test_script phase, so we disable the build phase to
 # avoid AppVeyor trying to build something and failing.
