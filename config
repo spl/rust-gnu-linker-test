@@ -1,2 +1,4 @@
 [target.i686-pc-windows-gnu]
-linker = "C:/msys64/mingwBITS/bin/gcc"
+linker = "C:/Users/appveyor/.rustup/toolchains/stable-i686-pc-windows-gnu/lib/rustlib/i686-pc-windows-gnu/bin/gcc"
+[target.x86_64-pc-windows-gnu]
+linker = "C:/Users/appveyor/.rustup/toolchains/stable-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/bin/gcc"
