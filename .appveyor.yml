@@ -34,7 +34,7 @@ install:
   - cargo --version
 
   # Use BITS where needed
-  - C:\msys64\usr\bin\sed -i "" -e "s/BITS/%BITS%/" config
+  - C:\msys64\usr\bin\sed -i "s/BITS/%BITS%/" config
   - set PATH=C:\msys64\mingw%BITS%\bin;%PATH%
 
   # Create the `pacman` package cache directory to avoid a warning.
