@@ -11,6 +11,7 @@ environment:
     - CHANNEL: stable
       ARCH: i686
       BITS: 32
+      WITH_CONFIG: 1
 
     - CHANNEL: stable
       ARCH: x86_64
@@ -23,6 +24,7 @@ environment:
     - CHANNEL: nightly
       ARCH: x86_64
       BITS: 64
+      WITH_CONFIG: 1
 
 install:
   # Install Rust
@@ -33,9 +35,14 @@ install:
   - rustc --version
   - cargo --version
 
-  # Use BITS where needed
+  # Set up config file
   - C:\msys64\usr\bin\sed -i "s/BITS/%BITS%/" config
+  - type %USERPROFILE%\.cargo\config
+
+  # Set path for toolchain
   - set PATH=C:\msys64\mingw%BITS%\bin;%PATH%
+  - where gcc
+  - where pkg-config
 
   # Create the `pacman` package cache directory to avoid a warning.
   #
@@ -47,8 +54,6 @@ install:
   # Install `graphite2`
   - appveyor-retry C:\msys64\usr\bin\pacman --sync --sysupgrade --needed --noconfirm "mingw-w64-%ARCH%-graphite2"
   - C:\msys64\usr\bin\pacman --query --info "mingw-w64-%ARCH%-graphite2"
-
-  - where pkg-config
   - pkg-config --libs --cflags graphite2
 
 # We do everything in the test_script phase, so we disable the build phase to
@@ -56,9 +61,5 @@ install:
 build: false
 
 test_script:
-  - copy config %USERPROFILE%\.cargo\config
-  - type %USERPROFILE%\.cargo\config
-  - cargo build -vv
-  - del %USERPROFILE%\.cargo\config
-  - cargo clean
+  - if defined WITH_CONFIG copy config %USERPROFILE%\.cargo\config
   - cargo build -vv
