@@ -15,22 +15,22 @@ environment:
 
     - CHANNEL: stable
       ARCH: x86_64
-      CONFIG_TOOLCHAIN: 1
+      CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER: C:/Users/appveyor/.rustup/toolchains/stable-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/bin/gcc
 
     - CHANNEL: stable
       ARCH: i686
-      CONFIG_MINGW: 1
+      CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER: C:/msys64/mingw32/bin/gcc
 
     - CHANNEL: nightly
       ARCH: x86_64
 
     - CHANNEL: nightly
       ARCH: i686
-      CONFIG_TOOLCHAIN: 1
+      CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER: C:/Users/appveyor/.rustup/toolchains/nightly-i686-pc-windows-gnu/lib/rustlib/i686-pc-windows-gnu/bin/gcc
 
     - CHANNEL: nightly
       ARCH: x86_64
-      CONFIG_MINGW: 1
+      CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER: C:/msys64/mingw64/bin/gcc
 
 install:
   # Install Rust
@@ -59,14 +59,9 @@ install:
   - C:\msys64\usr\bin\pacman --query --info "mingw-w64-%ARCH%-graphite2"
   - pkg-config --libs --cflags graphite2
 
-  # Create destination directory for `config`.
-  - mkdir .cargo
-
 # We do everything in the test_script phase, so we disable the build phase to
 # avoid AppVeyor trying to build something and failing.
 build: false
 
 test_script:
-  - if defined CONFIG_TOOLCHAIN copy config-toolchain .cargo\config
-  - if defined CONFIG_MINGW     copy config-mingw     .cargo\config
   - cargo build -vv
